@@ -1,0 +1,23 @@
+import 'package:course_travel/features/destination/domain/entities/destination_entity.dart';
+import 'package:course_travel/features/destination/domain/usecases/search_destination_usecase%20copy.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+part 'search_destination_event.dart';
+part 'search_destination_state.dart';
+
+class SearchDestinationBloc
+    extends Bloc<SearchDestinationEvent, SearchDestinationState> {
+  final SearchDestinationUsecase _useCase;
+
+  SearchDestinationBloc(this._useCase) : super(SearchDestinationInitial()) {
+    on<OnSearchDestination>((event, emit) async {
+      emit(SearchDestinationLoading());
+
+      final result = await _useCase(event.query);
+
+      result.fold((failure) => emit(SearchDestinationFailure(failure.message)),
+          (data) => emit(SearchDestinationLoaded(data)));
+    });
+  }
+}
