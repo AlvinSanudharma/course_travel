@@ -14,7 +14,7 @@ abstract class DestinationRemoteDatasource {
 class DestinationRemoteDatasourceImpl implements DestinationRemoteDatasource {
   final http.Client client;
 
-  DestinationRemoteDatasourceImpl({required this.client});
+  DestinationRemoteDatasourceImpl(this.client);
 
   @override
   Future<List<DestinationModel>> all() async {
