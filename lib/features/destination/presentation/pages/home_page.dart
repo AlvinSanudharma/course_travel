@@ -1,10 +1,13 @@
+import 'package:course_travel/api/urls.dart';
+import 'package:course_travel/features/destination/domain/entities/destination_entity.dart';
 import 'package:course_travel/features/destination/presentation/bloc/top_destination/top_destination_bloc.dart';
 import 'package:course_travel/features/destination/presentation/widgets/circle_loading.dart';
 import 'package:course_travel/features/destination/presentation/widgets/text_failure.dart';
-import 'package:flutter/foundation.dart';
+import 'package:course_travel/features/destination/presentation/widgets/top_destination_image.dart';
+import 'package:d_method/d_method.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,7 +52,11 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 20,
           ),
-          topDestination()
+          topDestination(),
+          const SizedBox(
+            height: 30,
+          ),
+          allDestination(),
         ],
       ),
     );
@@ -208,7 +215,23 @@ class _HomePageState extends State<HomePage> {
               return TextFailure(message: state.message);
             }
 
-            if (state is TopDestinationLoaded) {}
+            if (state is TopDestinationLoaded) {
+              List<DestinationEntity> list = state.data;
+
+              return AspectRatio(
+                aspectRatio: 1.5,
+                child: PageView.builder(
+                  controller: topDestinationController,
+                  itemCount: list.length,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    DestinationEntity destination = list[index];
+
+                    return itemTopDestination(destination);
+                  },
+                ),
+              );
+            }
 
             return const SizedBox(
               height: 120,
@@ -217,5 +240,131 @@ class _HomePageState extends State<HomePage> {
         )
       ],
     );
+  }
+
+  Widget itemTopDestination(DestinationEntity destination) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Column(
+        children: [
+          Expanded(
+              child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: TopDestinationImage(
+              url: URLs.image(destination.cover),
+            ),
+          )),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      destination.name,
+                      style: const TextStyle(
+                          height: 1, fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 15,
+                          height: 15,
+                          alignment: Alignment.centerLeft,
+                          child: const Icon(
+                            Icons.location_on,
+                            color: Colors.grey,
+                            size: 15,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          destination.location,
+                          style: const TextStyle(
+                              height: 1,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 15,
+                          height: 15,
+                          alignment: Alignment.center,
+                          child: const Icon(
+                            Icons.fiber_manual_record,
+                            color: Colors.grey,
+                            size: 10,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          destination.category,
+                          style: const TextStyle(
+                              height: 1,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    children: [
+                      RatingBar.builder(
+                        initialRating: destination.rate,
+                        allowHalfRating: true,
+                        unratedColor: Colors.grey,
+                        itemBuilder: (context, index) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (value) {},
+                        itemSize: 15,
+                        ignoreGestures: true,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        '(${DMethod.numberAutoDigit(destination.rate)})',
+                        style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                      onPressed: () {}, icon: const Icon(Icons.favorite_border))
+                ],
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget allDestination() {
+    return SizedBox();
   }
 }
