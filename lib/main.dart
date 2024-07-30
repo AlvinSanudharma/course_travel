@@ -41,6 +41,7 @@ class MainApp extends StatelessWidget {
         onGenerateRoute: AppRoute.onGenerateRoute,
         theme: ThemeData(
             useMaterial3: true,
+            appBarTheme: AppBarTheme(color: Colors.white),
             textTheme: GoogleFonts.poppinsTextTheme(),
             scaffoldBackgroundColor: Colors.white),
       ),

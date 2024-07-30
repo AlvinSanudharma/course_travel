@@ -1,5 +1,5 @@
 import 'package:course_travel/features/destination/domain/entities/destination_entity.dart';
-import 'package:course_travel/features/destination/domain/usecases/search_destination_usecase%20copy.dart';
+import 'package:course_travel/features/destination/domain/usecases/search_destination_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

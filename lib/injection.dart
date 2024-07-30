@@ -6,7 +6,7 @@ import 'package:course_travel/features/destination/data/repositories/destination
 import 'package:course_travel/features/destination/domain/repositories/destination_repository.dart';
 import 'package:course_travel/features/destination/domain/usecases/get_all_destination_usecase.dart';
 import 'package:course_travel/features/destination/domain/usecases/get_top_destination_usecase.dart';
-import 'package:course_travel/features/destination/domain/usecases/search_destination_usecase%20copy.dart';
+import 'package:course_travel/features/destination/domain/usecases/search_destination_usecase.dart';
 import 'package:course_travel/features/destination/presentation/bloc/all_destination/all_destination_bloc.dart';
 import 'package:course_travel/features/destination/presentation/bloc/search_destination/search_destination_bloc.dart';
 import 'package:course_travel/features/destination/presentation/bloc/top_destination/top_destination_bloc.dart';
