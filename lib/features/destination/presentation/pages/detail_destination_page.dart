@@ -4,6 +4,7 @@ import 'package:course_travel/features/destination/presentation/widgets/circle_l
 import 'package:course_travel/features/destination/presentation/widgets/gallery_photo.dart';
 import 'package:d_method/d_method.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -61,8 +62,70 @@ class _DetailDestinationPageState extends State<DetailDestinationPage> {
           const SizedBox(
             height: 24,
           ),
+          facilities(),
+          const SizedBox(
+            height: 24,
+          ),
+          details(),
+          const SizedBox(
+            height: 24,
+          ),
         ],
       ),
+    );
+  }
+
+  Widget facilities() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Facilities',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        ...widget.destination.facilities.map(
+          (facility) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.radio_button_checked,
+                    size: 15,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    facility,
+                    style: const TextStyle(fontSize: 16, color: Colors.black54),
+                  )
+                ],
+              ),
+            );
+          },
+        ).toList()
+      ],
+    );
+  }
+
+  Widget details() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Details',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Text(
+          widget.destination.description,
+          style: const TextStyle(fontSize: 16, color: Colors.black54),
+        ),
+      ],
     );
   }
 
