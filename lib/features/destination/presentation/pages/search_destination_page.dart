@@ -6,6 +6,7 @@ import 'package:course_travel/features/destination/presentation/widgets/text_fai
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class SearchDestinationPage extends StatefulWidget {
   const SearchDestinationPage({super.key});
@@ -112,6 +113,57 @@ class _SearchDestinationPageState extends State<SearchDestinationPage> {
               return null;
             },
           ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: AspectRatio(
+              aspectRatio: 4,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  Colors.black87,
+                  Colors.transparent,
+                ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            destinationEntity.name,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                          Text(
+                            destinationEntity.location,
+                            style: const TextStyle(
+                                color: Colors.white54, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RatingBar.builder(
+                      initialRating: destinationEntity.rate,
+                      allowHalfRating: true,
+                      unratedColor: Colors.grey,
+                      itemBuilder: (context, index) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (value) {},
+                      itemSize: 15,
+                      ignoreGestures: true,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
