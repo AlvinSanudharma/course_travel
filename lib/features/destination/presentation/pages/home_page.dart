@@ -131,7 +131,9 @@ class _HomePageState extends State<HomePage> {
             width: 10,
           ),
           IconButton.filledTonal(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoute.searchDestination);
+              },
               icon: const Icon(
                 Icons.search,
                 size: 24,

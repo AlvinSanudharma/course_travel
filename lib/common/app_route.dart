@@ -1,6 +1,7 @@
 import 'package:course_travel/features/destination/domain/entities/destination_entity.dart';
 import 'package:course_travel/features/destination/presentation/pages/dashboard.dart';
 import 'package:course_travel/features/destination/presentation/pages/detail_destination_page.dart';
+import 'package:course_travel/features/destination/presentation/pages/search_destination_page.dart';
 import 'package:flutter/material.dart';
 
 class AppRoute {
@@ -13,6 +14,10 @@ class AppRoute {
       case dashboard:
         return MaterialPageRoute(
           builder: (context) => const Dashboard(),
+        );
+      case searchDestination:
+        return MaterialPageRoute(
+          builder: (context) => const SearchDestinationPage(),
         );
       case detailDestination:
         final destination = settings.arguments;
