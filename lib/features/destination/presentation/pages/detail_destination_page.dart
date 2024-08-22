@@ -4,7 +4,6 @@ import 'package:course_travel/features/destination/presentation/widgets/circle_l
 import 'package:course_travel/features/destination/presentation/widgets/gallery_photo.dart';
 import 'package:d_method/d_method.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -70,8 +69,95 @@ class _DetailDestinationPageState extends State<DetailDestinationPage> {
           const SizedBox(
             height: 24,
           ),
+          reviews(),
+          const SizedBox(
+            height: 30,
+          ),
         ],
       ),
+    );
+  }
+
+  Widget reviews() {
+    List list = [
+      ['Jhon', 'assets/images/p1.jpg', 4.9, 'Best place', '2023-01-02']
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Reviews',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        ...list.map(
+          (e) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 15,
+                    backgroundImage: AssetImage(e[1]),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              e[0],
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            RatingBar.builder(
+                              initialRating: e[2].toDouble(),
+                              allowHalfRating: true,
+                              unratedColor: Colors.grey,
+                              itemBuilder: (context, index) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (value) {},
+                              itemSize: 15,
+                              ignoreGestures: true,
+                            ),
+                            const Spacer(),
+                            Text(
+                              DateFormat('d MMM').format(
+                                DateTime.parse(e[4]),
+                              ),
+                              style: const TextStyle(
+                                  color: Colors.grey, fontSize: 12),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          e[3],
+                          style: const TextStyle(
+                            color: Colors.black54,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        ).toList()
+      ],
     );
   }
 
