@@ -19,5 +19,9 @@ class SearchDestinationBloc
       result.fold((failure) => emit(SearchDestinationFailure(failure.message)),
           (data) => emit(SearchDestinationLoaded(data)));
     });
+
+    on<OnResetSearchDestination>((event, emit) {
+      emit(SearchDestinationInitial());
+    });
   }
 }

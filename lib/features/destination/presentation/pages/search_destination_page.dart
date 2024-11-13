@@ -1,4 +1,5 @@
 import 'package:course_travel/api/urls.dart';
+import 'package:course_travel/common/app_route.dart';
 import 'package:course_travel/features/destination/domain/entities/destination_entity.dart';
 import 'package:course_travel/features/destination/presentation/bloc/search_destination/search_destination_bloc.dart';
 import 'package:course_travel/features/destination/presentation/widgets/circle_loading.dart';
@@ -27,6 +28,13 @@ class _SearchDestinationPageState extends State<SearchDestinationPage> {
         .add(OnSearchDestination(edtSearch.text));
 
     FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<SearchDestinationBloc>().add(OnResetSearchDestination());
   }
 
   @override
@@ -67,7 +75,7 @@ class _SearchDestinationPageState extends State<SearchDestinationPage> {
 
                     return Container(
                       margin: EdgeInsets.only(
-                          left: 40, bottom: index == list.length - 1 ? 0 : 20),
+                          bottom: index == list.length - 1 ? 0 : 20),
                       child: itemSearch(destinationEntity),
                     );
                   },
@@ -81,90 +89,94 @@ class _SearchDestinationPageState extends State<SearchDestinationPage> {
     );
   }
 
-  AspectRatio itemSearch(DestinationEntity destinationEntity) {
-    return AspectRatio(
-      aspectRatio: 2,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          ExtendedImage.network(
-            URLs.image(destinationEntity.cover),
-            fit: BoxFit.cover,
-            width: double.infinity,
-            handleLoadingProgress: true,
-            loadStateChanged: (state) {
-              if (state.extendedImageLoadState == LoadState.failed) {
-                return Material(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.grey[300],
-                  child: const Icon(
-                    Icons.broken_image,
-                    color: Colors.black,
+  Widget itemSearch(DestinationEntity destinationEntity) {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, AppRoute.detailDestination,
+          arguments: destinationEntity),
+      child: AspectRatio(
+        aspectRatio: 2,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            ExtendedImage.network(
+              URLs.image(destinationEntity.cover),
+              fit: BoxFit.cover,
+              width: double.infinity,
+              handleLoadingProgress: true,
+              loadStateChanged: (state) {
+                if (state.extendedImageLoadState == LoadState.failed) {
+                  return Material(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.grey[300],
+                    child: const Icon(
+                      Icons.broken_image,
+                      color: Colors.black,
+                    ),
+                  );
+                }
+                if (state.extendedImageLoadState == LoadState.loading) {
+                  return Material(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.grey[300],
+                    child: const CircleLoading(),
+                  );
+                }
+                return null;
+              },
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: AspectRatio(
+                aspectRatio: 4,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                    Colors.black87,
+                    Colors.transparent,
+                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              destinationEntity.name,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
+                            Text(
+                              destinationEntity.location,
+                              style: const TextStyle(
+                                  color: Colors.white54, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                      RatingBar.builder(
+                        initialRating: destinationEntity.rate,
+                        allowHalfRating: true,
+                        unratedColor: Colors.grey,
+                        itemBuilder: (context, index) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (value) {},
+                        itemSize: 15,
+                        ignoreGestures: true,
+                      ),
+                    ],
                   ),
-                );
-              }
-              if (state.extendedImageLoadState == LoadState.loading) {
-                return Material(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.grey[300],
-                  child: const CircleLoading(),
-                );
-              }
-              return null;
-            },
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: AspectRatio(
-              aspectRatio: 4,
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  Colors.black87,
-                  Colors.transparent,
-                ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            destinationEntity.name,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
-                          ),
-                          Text(
-                            destinationEntity.location,
-                            style: const TextStyle(
-                                color: Colors.white54, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                    RatingBar.builder(
-                      initialRating: destinationEntity.rate,
-                      allowHalfRating: true,
-                      unratedColor: Colors.grey,
-                      itemBuilder: (context, index) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      onRatingUpdate: (value) {},
-                      itemSize: 15,
-                      ignoreGestures: true,
-                    ),
-                  ],
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -209,7 +221,9 @@ class _SearchDestinationPageState extends State<SearchDestinationPage> {
             width: 10,
           ),
           IconButton.filledTonal(
-              onPressed: () {},
+              onPressed: () {
+                search();
+              },
               icon: const Icon(
                 Icons.search,
                 size: 24,
